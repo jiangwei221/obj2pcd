@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include <vector>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 #include "glm/glm.hpp"
 #include "glm/vec3.hpp" // vec3
 #include "glm/gtx/string_cast.hpp"
@@ -29,8 +31,10 @@ int main (int argc, char **argv)
     }
     //set sample density
     int sample_density = atoi(argv[3]);
-    //TO-DO:
+    
     //random seed
+    srand (time(NULL));
+
     bool flip = false;
     if(argc > 4)
     {

@@ -37,5 +37,3 @@ Also, replace the `//` to `/` in the obj file.
 ### TO-DO
 
 A more robust model loader.
-
-Random seed.
