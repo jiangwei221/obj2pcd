@@ -10,7 +10,9 @@ Some converter on the web directly convert the mesh vertex into a point cloud. I
 
 In this implementation, we sample the point cloud on the surface of a triangle, not the 3 vertices.
 
-![cube-vis](https://i.imgur.com/hnjpgQ1.png)
+Here is a visualization of the sampling of a cube consists of 12 traingles.
+
+![cube-vis](https://i.imgur.com/hnjpgQ1.png?1)
 
 ### Build
 
