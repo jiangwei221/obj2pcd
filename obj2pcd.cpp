@@ -3,8 +3,8 @@
 //using glm, pcl library
 //compile command: make
 //sample run command: 
-// ./obj2pcd ../models/part.obj 2000 0
-// ./pcd_viewer ../output/part.pcd -ps 5 -normals 1 -normals_scale 10
+// ./obj2pcd ../models/monkey.obj ../output/monkey.pcd 2000
+
 #include <iostream>
 #include <vector>
 #include "glm/glm.hpp"
@@ -21,25 +21,25 @@ using namespace glm;
 
 int main (int argc, char **argv)
 {
-    if (argc < 3)
+    if (argc < 4)
     {
-        pcl::console::print_error ("pcdfile sample_density optional_flip_flag\n", argv[0]);
+        pcl::console::print_error ("objfile_path pcdfile_path sample_density optional_flip_flag\n", argv[0]);
         return 1;
     }
-    //how many samples
-    int sample_density = atoi(argv[2]);
+    //set sample density
+    int sample_density = atoi(argv[3]);
     //TO-DO:
     //random seed
     bool flip = false;
-    if(argc > 3)
+    if(argc > 4)
     {
-        flip = atoi(argv[3]);;
+        flip = atoi(argv[4]);
     }
     Sampler sampler = Sampler(argv[1], flip);
 
-    pcl::PointCloud<pcl::PointNormal> testcloud = sampler.getPointCloud(sample_density);
+    pcl::PointCloud<pcl::PointNormal> out_cloud = sampler.getPointCloud(sample_density);
 
-    pcl::io::savePCDFileASCII("../output/test_pcd.pcd", testcloud);
-    std::cerr << "Saved " << testcloud.points.size() << " data points to test_pcd.pcd." << std::endl;
+    pcl::io::savePCDFileASCII(argv[2], out_cloud);
+    std::cerr << "saved " << out_cloud.points.size() << " data points to tartget pcd." << std::endl;
     return 0;
 }

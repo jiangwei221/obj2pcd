@@ -10,10 +10,6 @@
 
 using namespace glm;
 
-//out_vertices = 3 * numOfTriangles
-
-
-
 bool loadOBJ(const char *path, std::vector<vec3> &out_vertices, std::vector<vec3> &out_normals)
 {
 	printf("Loading OBJ file %s...\n", path);

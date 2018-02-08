@@ -127,12 +127,6 @@ class Sampler
             float w0 = area0 / tarea;
             float w1 = area1 / tarea;
             float w2 = area2 / tarea;
-            // float w0 =
-            // float w1 = ((c.y - a.y) * (pt.x - c.x) + (a.x - c.x) * (pt.y - c.y)) / ((b.y - c.y) * (a.x - c.x) + (c.x - b.x) * (a.y - c.y));
-            // float w2 = 1.0 - w0 - w1;
-            // std::cout<<((b.y - c.y) * (a.x - c.x) + (c.x - b.x) * (a.y - c.y))<<std::endl;
-            //std::cout << "tarea: " << tarea << ", area0: " << area0 << std::endl;
-            //std::cout << "w0: " << w0 << ", w1: " << w1 << ", w2: " << w2 << std::endl;
             vec3 pt_n = w0 * a_n + w1 * b_n + w2 * c_n;
             if (flip_flag)
                 pt_n = -pt_n;
