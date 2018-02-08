@@ -24,3 +24,14 @@ In this implementation, we sample the point cloud on the surface of a triangle, 
 
 This command will sample the monkey.obj file into a pcd file, 2000 is the sample density. You can adjust the density.
 
+### Note
+
+Because I'm using a very simple model loader from [opengl-tutorial](opengl-tutorial.org), it can only handle the obj file contains vertex and normal data. If your obj have no normal data, it will fail. If your obj file have texture coord, it will fail. 
+
+Also, replace the `//` to `/` in the obj file.
+
+### TO-DO
+
+A more robust model loader.
+
+Random seed.
