@@ -57,7 +57,7 @@ class Sampler
 
     pcl::PointCloud<pcl::PointNormal> getPointCloud(int sample_density)
     {
-        int num_samples = int(sample_density * tarea);
+        int num_samples = int(sample_density * tarea + 0.5);
         pcl::PointCloud<pcl::PointNormal> cloud;
         cloud.width = num_samples;
         cloud.height = 1;
