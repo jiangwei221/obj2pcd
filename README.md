@@ -10,9 +10,7 @@ Some converter on the web directly convert the mesh vertex into a point cloud. I
 
 In this implementation, we sample the point cloud on the surface of a triangle, not the 3 vertices.
 
-```
-![cube-pcd-vis](https://i.imgur.com/hnjpgQ1.png)
-```
+![cube-vis](https://i.imgur.com/hnjpgQ1.png)
 
 ### Build
 
