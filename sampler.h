@@ -79,7 +79,6 @@ class Sampler
                 x -= weights[j];
             }
 
-            //std::cout << tri_index << std::endl;
             //for a random tri, randomly select a point
             //interpolate the normal
             vec3 pt_n;

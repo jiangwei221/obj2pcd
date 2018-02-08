@@ -4,6 +4,7 @@
 //compile command: make
 //sample run command: 
 // ./obj2pcd ../models/monkey.obj ../output/monkey.pcd 2000
+// ./pcd_viewer ../output/monkey.pcd -ps 5
 
 #include <iostream>
 #include <vector>
