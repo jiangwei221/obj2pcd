@@ -1,10 +1,11 @@
-//from opengl-tutorial.org
+//based on opengl-tutorial.org
 
 #ifndef OBJLOADER_H
 #define OBJLOADER_H
 
 #include <vector>
 #include <iostream>
+#include <stdio.h>
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 
@@ -51,21 +52,70 @@ bool loadOBJ(const char *path, std::vector<vec3> &out_vertices, std::vector<vec3
 		}
 		else if (strcmp(lineHeader, "f") == 0)
 		{
-			std::string vertex1, vertex2, vertex3;
-			unsigned int vertexIndex[3], normalIndex[3];
-			int matches = fscanf(file, "%d/%d %d/%d %d/%d\n", &vertexIndex[0], &normalIndex[0], &vertexIndex[1], &normalIndex[1], &vertexIndex[2], &normalIndex[2]);
-			if (matches != 6)
+			char strvertex[3][128];
+			int slash_counter[3] = {0,0,0};
+			bool sample_normal = true;
+			int matches = 0;
+
+			//read vertex data tp char array
+			matches = fscanf(file, "%s %s %s\n", strvertex[0], strvertex[1], strvertex[2]);
+			if (matches != 3)
 			{
 				printf("File can't be read by our simple parser :-( Try exporting with other options\n");
 				fclose(file);
 				return false;
 			}
-			vertexIndices.push_back(vertexIndex[0]);
-			vertexIndices.push_back(vertexIndex[1]);
-			vertexIndices.push_back(vertexIndex[2]);
-			normalIndices.push_back(normalIndex[0]);
-			normalIndices.push_back(normalIndex[1]);
-			normalIndices.push_back(normalIndex[2]);
+			//check the normal data by the number of slash
+			//0 or 1 slash means no normal data
+			for (int i = 0; i < 3; i++)
+			{
+				for (int j = 0; j < strlen(strvertex[i]); j++)
+				{
+					if (strvertex[i][j] == '/')
+						slash_counter[i]++;
+				}
+			}
+			for (int i = 0; i < 3; i++)
+			{
+				if (slash_counter[i] == 1 || slash_counter[i] == 0)
+				{
+					//no normal data in obj
+					sample_normal = false;
+					break;
+				}
+			}
+
+			//if sample_normal == false
+			//then push the 3 first int values into vertexIndices
+			if (sample_normal == false)
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					char *v_id;
+					int index;
+					v_id = strtok(strvertex[i], "/");
+					index = atoi(v_id);
+					vertexIndices.push_back(index);
+					
+				}
+			}
+			//if sample_normal == true
+			else
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					char *content = strdup(strvertex[i]);
+					char *v_id;
+					int index;
+					v_id = strsep(&content, "/");
+					index = atoi(v_id);
+					vertexIndices.push_back(index);
+					v_id = strsep(&content, "/");
+					v_id = strsep(&content, "/");
+					index = atoi(v_id);
+					normalIndices.push_back(index);
+				}
+			}
 		}
 		else
 		{
@@ -74,21 +124,31 @@ bool loadOBJ(const char *path, std::vector<vec3> &out_vertices, std::vector<vec3
 			fgets(stupidBuffer, 1000, file);
 		}
 	}
-
+	std::cout << "vertexIndices: " << vertexIndices.size() << std::endl;
+	std::cout << "normalIndices: " << normalIndices.size() << std::endl;
 	// For each vertex of each triangle
 	for (unsigned int i = 0; i < vertexIndices.size(); i++)
 	{
 
 		// Get the indices of its attributes
 		unsigned int vertexIndex = vertexIndices[i];
-		unsigned int normalIndex = normalIndices[i];
 
 		// Get the attributes thanks to the index
 		vec3 vertex = temp_vertices[vertexIndex - 1];
-		vec3 normal = temp_normals[normalIndex - 1];
 
 		// Put the attributes in buffers
 		out_vertices.push_back(vertex);
+	}
+	for (unsigned int i = 0; i < normalIndices.size(); i++)
+	{
+
+		// Get the indices of its attributes
+		unsigned int normalIndex = normalIndices[i];
+
+		// Get the attributes thanks to the index
+		vec3 normal = temp_normals[normalIndex - 1];
+
+		// Put the attributes in buffers
 		out_normals.push_back(normal);
 	}
 	fclose(file);

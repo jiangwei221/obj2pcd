@@ -3,8 +3,8 @@
 //using glm, pcl library
 //compile command: make
 //sample run command: 
-// ./obj2pcd ../models/monkey.obj ../output/monkey.pcd 2000
-// ./pcd_viewer ../output/monkey.pcd -ps 5
+// ./obj2pcd ../models/monkey_v.obj ../output/monkey.pcd 2000
+// ./pcd_viewer ../output/monkey.pcd -ps 5 -normals 1 -normals_scale 1
 
 #include <iostream>
 #include <vector>
@@ -26,21 +26,28 @@ int main (int argc, char **argv)
 {
     if (argc < 4)
     {
-        pcl::console::print_error ("objfile_path pcdfile_path sample_density optional_flip_flag\n", argv[0]);
+        pcl::console::print_error ("objfile_path pcdfile_path sample_density optioanl_normal_flag optional_flip_flag\n", argv[0]);
         return 1;
     }
     //set sample density
     int sample_density = atoi(argv[3]);
-    
+
     //random seed
     srand (time(NULL));
 
-    bool flip = false;
+    bool normal_flag = true;
     if(argc > 4)
     {
-        flip = atoi(argv[4]);
+        normal_flag = atoi(argv[4]);
     }
-    Sampler sampler = Sampler(argv[1], flip);
+
+    bool flip = false;
+    if(argc > 5)
+    {
+        flip = atoi(argv[5]);
+    }
+
+    Sampler sampler = Sampler(argv[1], normal_flag, flip);
 
     pcl::PointCloud<pcl::PointNormal> out_cloud = sampler.getPointCloud(sample_density);
 

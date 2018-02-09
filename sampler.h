@@ -21,8 +21,9 @@ class Sampler
     double *weights;
 
     bool flip_flag;
+    bool normal_flag;
 
-    Sampler(const char *path, bool flip)
+    Sampler(const char *path, bool normal_flag, bool flip_flag)
     {
         bool res = loadOBJ(path, tris, normals);
         std::cout << "read: " << (res ? "sucessful" : "fail") << std::endl;
@@ -41,7 +42,8 @@ class Sampler
             weights[i] /= tarea;
         }
 
-        flip_flag = flip;
+        this->flip_flag = flip_flag;
+        this->normal_flag = normal_flag && normals.size() > 0;
         std::cout << "modela surface area: " << tarea << std::endl;
     }
 
@@ -80,16 +82,29 @@ class Sampler
             }
 
             //for a random tri, randomly select a point
-            //interpolate the normal
-            vec3 pt_n;
-            vec3 pt = getRandomPtOnTri(tris[tri_index * 3], tris[tri_index * 3 + 1], tris[tri_index * 3 + 2], normals[tri_index * 3], normals[tri_index * 3 + 1], normals[tri_index * 3 + 2], pt_n);
-            //write to cloud
-            cloud.points[i].x = pt.x;
-            cloud.points[i].y = pt.y;
-            cloud.points[i].z = pt.z;
-            cloud.points[i].normal_x = pt_n.x;
-            cloud.points[i].normal_y = pt_n.y;
-            cloud.points[i].normal_z = pt_n.z;
+            if (normal_flag)
+            {
+                //interpolate the normal
+                vec3 pt_n;
+                vec3 pt = getRandomPtOnTri(tris[tri_index * 3], tris[tri_index * 3 + 1], tris[tri_index * 3 + 2], normals[tri_index * 3], normals[tri_index * 3 + 1], normals[tri_index * 3 + 2], pt_n);
+                //write to cloud
+                cloud.points[i].x = pt.x;
+                cloud.points[i].y = pt.y;
+                cloud.points[i].z = pt.z;
+                cloud.points[i].normal_x = pt_n.x;
+                cloud.points[i].normal_y = pt_n.y;
+                cloud.points[i].normal_z = pt_n.z;
+            }
+            else
+            //no normal, save normal as (0,0,0)
+            {
+                vec3 pt_n;
+                vec3 pt = getRandomPtOnTri(tris[tri_index * 3], tris[tri_index * 3 + 1], tris[tri_index * 3 + 2], vec3(0, 0, 0), vec3(0, 0, 0), vec3(0, 0, 0), pt_n);
+                //write to cloud
+                cloud.points[i].x = pt.x;
+                cloud.points[i].y = pt.y;
+                cloud.points[i].z = pt.z;
+            }
         }
         return cloud;
     }
