@@ -36,6 +36,6 @@ Because I'm using a very simple model loader from [opengl-tutorial](opengl-tutor
 
 If you want to sample an obj mesh exported by Blender, make sure you triangulate it before you export.
 
-###TO-DO
+### TO-DO
 
 Python script to run over the whole dir.
