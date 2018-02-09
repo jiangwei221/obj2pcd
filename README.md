@@ -26,7 +26,7 @@ Here is a visualization of the sampling of a cube consists of 12 traingles.
 
 `./obj2pcd ../models/monkey_v.obj ../output/monkey.pcd 2000`
 
-This command will sample the monkey.obj file into a pcd file, 2000 is the sample density. You can adjust the density.
+This command will sample the monkey_v.obj file (only vertex) into a pcd file, 2000 is the sample density. You can adjust the density.
 
 There are two optional argvs. One is normal_flag, you need the interpolated normals in PCD or not, default is on. One is flip_flag, you need to flip the normal direction or not, default is off.
 
