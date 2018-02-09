@@ -28,12 +28,8 @@ Here is a visualization of the sampling of a cube consists of 12 traingles.
 
 This command will sample the monkey.obj file into a pcd file, 2000 is the sample density. You can adjust the density.
 
+There are two optional argvs. One is normal_flag, you need the interpolated normals in PCD or not, default is on. One is flip_flag, you need to flip the normal direction or not, default is off.
+
 ### Note
 
-Because I'm using a very simple model loader from [opengl-tutorial](opengl-tutorial.org), it can only handle the obj file contains vertex and normal data. If your obj have no normal data, it will fail. If your obj file have texture coord, it will fail. 
-
-Also, replace the `//` to `/` in the obj file.
-
-### TO-DO
-
-A more robust model loader.
+Because I'm using a very simple model loader from [opengl-tutorial](opengl-tutorial.org), it can only handle the obj file with triangle, no quadrilateral support.
