@@ -35,3 +35,7 @@ There are two optional argvs. One is normal_flag, you need the interpolated norm
 Because I'm using a very simple model loader from [opengl-tutorial](opengl-tutorial.org), it can only handle the obj file with triangles, no quadrilateral support.
 
 If you want to sample an obj mesh exported by Blender, make sure you triangulate it before you export.
+
+###TO-DO
+
+Python script to run over the whole dir.
