@@ -20,8 +20,9 @@ class Sampler
     double tarea;
     double *weights;
 
-    bool flip_flag;
-    bool normal_flag;
+    //two optioanl flags
+    bool flip_flag;   //default on
+    bool normal_flag; //default off
 
     Sampler(const char *path, bool normal_flag, bool flip_flag)
     {
@@ -47,6 +48,7 @@ class Sampler
         std::cout << "modela surface area: " << tarea << std::endl;
     }
 
+    //get the area of a triangle
     double getTriArea(const vec3 &a, const vec3 &b, const vec3 &c)
     {
         double e0 = distance(a, b);
@@ -57,6 +59,7 @@ class Sampler
         return area;
     }
 
+    //sample the mesh to point cloud
     pcl::PointCloud<pcl::PointNormal> getPointCloud(int sample_density)
     {
         int num_samples = int(sample_density * tarea + 0.5);
@@ -109,6 +112,7 @@ class Sampler
         return cloud;
     }
 
+    //pick a random point on the triangle, and interpolate the normal
     vec3 getRandomPtOnTri(const vec3 &a, const vec3 &b, const vec3 &c,
                           const vec3 &a_n, const vec3 &b_n, const vec3 &c_n,
                           vec3 &normal)
@@ -178,6 +182,7 @@ class Sampler
             }
             else
             {
+                //should never be executed
                 std::cout << "u: " << u << ", v: " << v << std::endl;
                 std::cout << "r0: " << r0 << ", r1: " << r1 << std::endl;
                 std::cout << "pt: " << to_string(pt) << std::endl;

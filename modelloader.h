@@ -53,7 +53,7 @@ bool loadOBJ(const char *path, std::vector<vec3> &out_vertices, std::vector<vec3
 		else if (strcmp(lineHeader, "f") == 0)
 		{
 			char strvertex[3][128];
-			int slash_counter[3] = {0,0,0};
+			int slash_counter[3] = {0, 0, 0};
 			bool sample_normal = true;
 			int matches = 0;
 
@@ -96,7 +96,6 @@ bool loadOBJ(const char *path, std::vector<vec3> &out_vertices, std::vector<vec3
 					v_id = strtok(strvertex[i], "/");
 					index = atoi(v_id);
 					vertexIndices.push_back(index);
-					
 				}
 			}
 			//if sample_normal == true
