@@ -24,7 +24,7 @@ Here is a visualization of the sampling of a cube consists of 12 traingles.
 
 ### Usage
 
-`./obj2pcd ../models/monkey.obj ../output/monkey.pcd 2000`
+`./obj2pcd ../models/monkey_v.obj ../output/monkey.pcd 2000`
 
 This command will sample the monkey.obj file into a pcd file, 2000 is the sample density. You can adjust the density.
 
@@ -32,4 +32,6 @@ There are two optional argvs. One is normal_flag, you need the interpolated norm
 
 ### Note
 
-Because I'm using a very simple model loader from [opengl-tutorial](opengl-tutorial.org), it can only handle the obj file with triangle, no quadrilateral support.
+Because I'm using a very simple model loader from [opengl-tutorial](opengl-tutorial.org), it can only handle the obj file with triangles, no quadrilateral support.
+
+If you want to sample an obj mesh exported by Blender, make sure you triangulate it before you export.
