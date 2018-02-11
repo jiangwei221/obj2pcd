@@ -36,6 +36,13 @@ Because I'm using a very simple model loader from [opengl-tutorial](opengl-tutor
 
 If you want to sample an obj mesh exported by Blender, make sure you triangulate it before you export.
 
+### convertall.py
+
+coverall.py is a simple python script to convert all the obj files under one folder into PCD.
+
+Sample usage: `python3 covertall.py ./models ./output 200`  where 200 is the sample density.
+
 ### TO-DO
 
-Python script to run over the whole dir.
+Better arguments list, like: `-sample_density 200 -normal_flag 1`
+
