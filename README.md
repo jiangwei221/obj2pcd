@@ -39,7 +39,7 @@ If you want to sample an obj mesh exported by Blender, make sure you triangulate
 ### convertall.py
 
 convertall.py is a simple python script to convert all the obj files under one folder into PCD.
-
+```
 usage: convertall.py [-h] [--normals NORMALS] [--flip FLIP]
                      models_dir output_dir sample_density
 
@@ -52,7 +52,7 @@ optional arguments:
   -h, --help         show this help message and exit
   --normals NORMALS  interpolate normals or not
   --flip FLIP        flip the normals or not
-
+```
 Sample usage: `python3 convertall.py ./models ./output 200 --normals 1`  where 200 is the sample density.
 
 
