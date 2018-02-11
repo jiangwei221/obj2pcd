@@ -24,7 +24,7 @@ Here is a visualization of the sampling of a cube consists of 12 traingles.
 
 ### Usage
 
-`./obj2pcd ../models/monkey_v.obj ../output/monkey.pcd 2000`
+`./obj2pcd ../models/monkey_v.obj ../output/monkey.pcd -sample_density 2000`
 
 This command will sample the monkey_v.obj file (only vertex) into a pcd file, 2000 is the sample density. You can adjust the density.
 
@@ -40,9 +40,20 @@ If you want to sample an obj mesh exported by Blender, make sure you triangulate
 
 convertall.py is a simple python script to convert all the obj files under one folder into PCD.
 
-Sample usage: `python3 convertall.py ./models ./output 200`  where 200 is the sample density.
+usage: convertall.py [-h] [--normals NORMALS] [--flip FLIP]
+                     models_dir output_dir sample_density
 
-### TO-DO
+positional arguments:
+  models_dir         models dir
+  output_dir         output dir
+  sample_density     sample density
 
-Better arguments list, like: `-sample_density 200 -normal_flag 1`
+optional arguments:
+  -h, --help         show this help message and exit
+  --normals NORMALS  interpolate normals or not
+  --flip FLIP        flip the normals or not
+
+Sample usage: `python3 convertall.py ./models ./output 200 --normals 1`  where 200 is the sample density.
+
+
 

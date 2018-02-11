@@ -1,31 +1,44 @@
 import os
 import sys
 from subprocess import call
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("models_dir", type=str,
+                    help="models dir")
+parser.add_argument("output_dir", type=str,
+                    help="output dir")
+parser.add_argument("sample_density", type=int,
+                    help="sample density")
+parser.add_argument("--normals", type=int,
+                    help="interpolate normals or not")
+parser.add_argument("--flip", type=int,
+                    help="flip the normals or not") 
+
+args = parser.parse_args()
 
 #sample command:
-#python3 covertall.py ./models ./output 200
+#python3 convertall.py ./models ./output 200 --normals 1
 
-if (len(sys.argv) < 4):
-    sys.stderr.write('Usage: models_dir output_dir sample_density optional_normal_flag optional_flip_flag ')
-    sys.exit(1)
+models_dir = args.models_dir
+output_dir = args.output_dir
+sample_density = args.sample_density
+normal_flag = 1 if (args.normals == None) else args.normals
+flip_flag = 0 if (args.flip == None) else args.flip
 
-models_dir = sys.argv[1]
-output_dir = sys.argv[2]
-sample_density = int(sys.argv[3])
-normal_flag = '1'
-flip_flag = '0'
+print('models_dir ' + str(models_dir))
+print('output_dir ' + str(output_dir))
+print('sample_density ' + str(sample_density))
+print('normal_flag ' + str(normal_flag))
+print('flip_flag ' + str(flip_flag))
 
-if(len(sys.argv) == 5):
-    normal_flag = sys.argv[4]
-
-if(len(sys.argv) == 6):
-    flip_flag = sys.argv[5]
 
 for filename in os.listdir(models_dir):
     if filename.endswith('.obj'):
+        print(filename)
         call(["./build/obj2pcd", 
                 models_dir+'/'+filename, 
                 output_dir+'/'+filename[0:-4]+'.pcd',
-                str(sample_density),
-                normal_flag,
-                flip_flag])
+                '-sample_density', str(sample_density),
+                '-normal_flag', str(normal_flag),
+                '-flip_flag', str(flip_flag)])
