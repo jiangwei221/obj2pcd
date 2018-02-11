@@ -38,9 +38,9 @@ If you want to sample an obj mesh exported by Blender, make sure you triangulate
 
 ### convertall.py
 
-coverall.py is a simple python script to convert all the obj files under one folder into PCD.
+convertall.py is a simple python script to convert all the obj files under one folder into PCD.
 
-Sample usage: `python3 covertall.py ./models ./output 200`  where 200 is the sample density.
+Sample usage: `python3 convertall.py ./models ./output 200`  where 200 is the sample density.
 
 ### TO-DO
 
