@@ -57,4 +57,3 @@ optional arguments:
 Sample usage: `python3 convertall.py ./models ./output 200 --normals 1`  where 200 is the sample density.
 
 ### TO-DO
-Use double precision.

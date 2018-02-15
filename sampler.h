@@ -14,10 +14,10 @@ using namespace glm;
 class Sampler
 {
   public:
-    std::vector<vec3> tris;
-    std::vector<vec3> normals;
+    std::vector<dvec3> tris;
+    std::vector<dvec3> normals;
     int num_tris;
-    double tarea;
+    double area_sum;
     double *weights;
 
     //two optioanl flags
@@ -31,25 +31,25 @@ class Sampler
 
         num_tris = int(tris.size() / 3);
         weights = new double[num_tris];
-        tarea = 0;
+        area_sum = 0;
         for (int i = 0; i < num_tris; i++)
         {
             double carea = getTriArea(tris[i * 3], tris[i * 3 + 1], tris[i * 3 + 2]);
             weights[i] = carea;
-            tarea += carea;
+            area_sum += carea;
         }
         for (int i = 0; i < num_tris; i++)
         {
-            weights[i] /= tarea;
+            weights[i] /= area_sum;
         }
 
         this->flip_flag = flip_flag;
         this->normal_flag = normal_flag && normals.size() > 0;
-        std::cout << "modela surface area: " << tarea << std::endl;
+        std::cout << "modela surface area: " << area_sum << std::endl;
     }
 
     //get the area of a triangle
-    double getTriArea(const vec3 &a, const vec3 &b, const vec3 &c)
+    double getTriArea(const dvec3 &a, const dvec3 &b, const dvec3 &c)
     {
         double e0 = distance(a, b);
         double e1 = distance(b, c);
@@ -62,7 +62,7 @@ class Sampler
     //sample the mesh to point cloud
     pcl::PointCloud<pcl::PointNormal> getPointCloud(int sample_density)
     {
-        int num_samples = int(sample_density * tarea + 0.5);
+        int num_samples = int(sample_density * area_sum + 0.5);
         pcl::PointCloud<pcl::PointNormal> cloud;
         cloud.width = num_samples;
         cloud.height = 1;
@@ -88,8 +88,8 @@ class Sampler
             if (normal_flag)
             {
                 //interpolate the normal
-                vec3 pt_n;
-                vec3 pt = getRandomPtOnTri(tris[tri_index * 3], tris[tri_index * 3 + 1], tris[tri_index * 3 + 2], normals[tri_index * 3], normals[tri_index * 3 + 1], normals[tri_index * 3 + 2], pt_n);
+                dvec3 pt_n;
+                dvec3 pt = getRandomPtOnTri(tris[tri_index * 3], tris[tri_index * 3 + 1], tris[tri_index * 3 + 2], normals[tri_index * 3], normals[tri_index * 3 + 1], normals[tri_index * 3 + 2], pt_n);
                 //write to cloud
                 cloud.points[i].x = pt.x;
                 cloud.points[i].y = pt.y;
@@ -101,8 +101,8 @@ class Sampler
             else
             //no normal, save normal as (0,0,0)
             {
-                vec3 pt_n;
-                vec3 pt = getRandomPtOnTri(tris[tri_index * 3], tris[tri_index * 3 + 1], tris[tri_index * 3 + 2], vec3(0, 0, 0), vec3(0, 0, 0), vec3(0, 0, 0), pt_n);
+                dvec3 pt_n;
+                dvec3 pt = getRandomPtOnTri(tris[tri_index * 3], tris[tri_index * 3 + 1], tris[tri_index * 3 + 2], dvec3(0, 0, 0), dvec3(0, 0, 0), dvec3(0, 0, 0), pt_n);
                 //write to cloud
                 cloud.points[i].x = pt.x;
                 cloud.points[i].y = pt.y;
@@ -113,39 +113,39 @@ class Sampler
     }
 
     //pick a random point on the triangle, and interpolate the normal
-    vec3 getRandomPtOnTri(const vec3 &a, const vec3 &b, const vec3 &c,
-                          const vec3 &a_n, const vec3 &b_n, const vec3 &c_n,
-                          vec3 &normal)
+    dvec3 getRandomPtOnTri(const dvec3 &a, const dvec3 &b, const dvec3 &c,
+                          const dvec3 &a_n, const dvec3 &b_n, const dvec3 &c_n,
+                          dvec3 &normal)
     {
-        float r0 = ((double)std::rand() / (RAND_MAX));
-        float r1 = ((double)std::rand() / (RAND_MAX));
-        vec3 e0 = b - a;
-        vec3 e1 = c - a;
-        vec3 pt = a + r0 * e0 + r1 * e1;
+        double tarea = double(getTriArea(a, b, c));
+        double r0 = ((double)std::rand() / (RAND_MAX));
+        double r1 = ((double)std::rand() / (RAND_MAX));
+        dvec3 e0 = b - a;
+        dvec3 e1 = c - a;
+        dvec3 pt = a + r0 * e0 + r1 * e1;
         //is pt in abc?
         //http://blackpawn.com/texts/pointinpoly/
         //if not r0=1-r0, r1=1-r1
         //calculate the barycentric coord
         //interpolate normal
-        vec3 e2 = pt - a;
-        float dot00 = dot(e0, e0);
-        float dot01 = dot(e0, e1);
-        float dot02 = dot(e0, e2);
-        float dot11 = dot(e1, e1);
-        float dot12 = dot(e1, e2);
-        float invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
-        float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-        float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+        dvec3 e2 = pt - a;
+        double dot00 = dot(e0, e0);
+        double dot01 = dot(e0, e1);
+        double dot02 = dot(e0, e2);
+        double dot11 = dot(e1, e1);
+        double dot12 = dot(e1, e2);
+        double invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+        double u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+        double v = (dot00 * dot12 - dot01 * dot02) * invDenom;
         if ((u >= -0.00001) && (v >= -0.00001) && (u + v <= 1))
         {
-            float tarea = float(getTriArea(a, b, c));
-            float area0 = float(getTriArea(b, c, pt));
-            float area1 = float(getTriArea(c, a, pt));
-            float area2 = float(getTriArea(a, c, pt));
-            float w0 = area0 / tarea;
-            float w1 = area1 / tarea;
-            float w2 = area2 / tarea;
-            vec3 pt_n = w0 * a_n + w1 * b_n + w2 * c_n;
+            double area0 = double(getTriArea(b, c, pt));
+            double area1 = double(getTriArea(c, a, pt));
+            double area2 = double(getTriArea(a, c, pt));
+            double w0 = area0 / tarea;
+            double w1 = area1 / tarea;
+            double w2 = area2 / tarea;
+            dvec3 pt_n = w0 * a_n + w1 * b_n + w2 * c_n;
             if (flip_flag)
                 pt_n = -pt_n;
             normal = normalize(pt_n);
@@ -167,14 +167,13 @@ class Sampler
             v = (dot00 * dot12 - dot01 * dot02) * invDenom;
             if ((u >= -0.00001) && (v >= -0.00001) && (u + v <= 1))
             {
-                float tarea = float(getTriArea(a, b, c));
-                float area0 = float(getTriArea(b, c, pt));
-                float area1 = float(getTriArea(c, a, pt));
-                float area2 = float(getTriArea(a, c, pt));
-                float w0 = area0 / tarea;
-                float w1 = area1 / tarea;
-                float w2 = area2 / tarea;
-                vec3 pt_n = w0 * a_n + w1 * b_n + w2 * c_n;
+                double area0 = double(getTriArea(b, c, pt));
+                double area1 = double(getTriArea(c, a, pt));
+                double area2 = double(getTriArea(a, c, pt));
+                double w0 = area0 / tarea;
+                double w1 = area1 / tarea;
+                double w2 = area2 / tarea;
+                dvec3 pt_n = w0 * a_n + w1 * b_n + w2 * c_n;
                 if (flip_flag)
                     pt_n = -pt_n;
                 normal = normalize(pt_n);
@@ -183,6 +182,7 @@ class Sampler
             else
             {
                 //should never be executed
+                std::cout << "tri area " << tarea << std::endl;
                 std::cout << "u: " << u << ", v: " << v << std::endl;
                 std::cout << "r0: " << r0 << ", r1: " << r1 << std::endl;
                 std::cout << "pt: " << to_string(pt) << std::endl;

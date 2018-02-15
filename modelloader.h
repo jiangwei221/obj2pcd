@@ -11,13 +11,13 @@
 
 using namespace glm;
 
-bool loadOBJ(const char *path, std::vector<vec3> &out_vertices, std::vector<vec3> &out_normals)
+bool loadOBJ(const char *path, std::vector<dvec3> &out_vertices, std::vector<dvec3> &out_normals)
 {
 	printf("Loading OBJ file %s...\n", path);
 
 	std::vector<unsigned int> vertexIndices, normalIndices;
-	std::vector<vec3> temp_vertices;
-	std::vector<vec3> temp_normals;
+	std::vector<dvec3> temp_vertices;
+	std::vector<dvec3> temp_normals;
 
 	FILE *file = fopen(path, "r");
 	if (file == NULL)
@@ -40,14 +40,14 @@ bool loadOBJ(const char *path, std::vector<vec3> &out_vertices, std::vector<vec3
 
 		if (strcmp(lineHeader, "v") == 0)
 		{
-			vec3 vertex;
-			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+			dvec3 vertex;
+			fscanf(file, "%lf %lf %lf\n", &vertex.x, &vertex.y, &vertex.z);
 			temp_vertices.push_back(vertex);
 		}
 		else if (strcmp(lineHeader, "vn") == 0)
 		{
-			vec3 normal;
-			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+			dvec3 normal;
+			fscanf(file, "%lf %lf %lf\n", &normal.x, &normal.y, &normal.z);
 			temp_normals.push_back(normal);
 		}
 		else if (strcmp(lineHeader, "f") == 0)
