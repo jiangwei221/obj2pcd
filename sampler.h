@@ -74,7 +74,7 @@ class Sampler
             //for every sample, randomly choose a tri
             int tri_index = 0;
             double x = ((double)std::rand() / (RAND_MAX));
-            for (int j = 0; j < num_samples; j++)
+            for (int j = 0; j < num_tris; j++)
             {
                 if (x <= weights[j])
                 {
