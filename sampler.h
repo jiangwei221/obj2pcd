@@ -141,7 +141,7 @@ class Sampler
         {
             double area0 = double(getTriArea(b, c, pt));
             double area1 = double(getTriArea(c, a, pt));
-            double area2 = double(getTriArea(a, c, pt));
+            double area2 = double(getTriArea(a, b, pt));
             double w0 = area0 / tarea;
             double w1 = area1 / tarea;
             double w2 = area2 / tarea;
