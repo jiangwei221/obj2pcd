@@ -34,7 +34,7 @@ using namespace glm;
 
 int main(int argc, char **argv)
 {
-    if (argc < 2)
+    if (argc < 3)
     {
         pcl::console::print_error("argv: objfile_path pcdfile_path sample_density optioanl_normal_flag optional_flip_flag\n", argv[0]);
         return 1;
